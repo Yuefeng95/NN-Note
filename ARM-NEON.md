@@ -185,13 +185,13 @@ inline void do_plain_neon_mul_ten_with_arr(const int8_t *tensor, const int8_t *a
     for (int i = 0; i < arr_len; i += 8) {
         w_mem = vld1_s8(a);
 
-        h_mem = vld1_s8(t);
+        h_mem = vld1_s8(t0);
         mul_res_mem0 = vpadalq_s16(mul_res_mem0, vmull_s8(w_mem, h_mem));
-        h_mem = vld1_s8(t + 8);
+        h_mem = vld1_s8(t1);
         mul_res_mem1 = vpadalq_s16(mul_res_mem1, vmull_s8(w_mem, h_mem));
-        h_mem = vld1_s8(t + 16);
+        h_mem = vld1_s8(t2);
         mul_res_mem2 = vpadalq_s16(mul_res_mem2, vmull_s8(w_mem, h_mem));
-        h_mem = vld1_s8(t + 24);
+        h_mem = vld1_s8(t3);
         mul_res_mem3 = vpadalq_s16(mul_res_mem3, vmull_s8(w_mem, h_mem));
     }
 ```
