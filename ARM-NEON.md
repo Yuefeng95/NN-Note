@@ -45,7 +45,7 @@ NEON实现的SIMD技术，依赖一套NEON寄存器，这套寄存器与L1 cache
 | 名称 | 编号 | 大小 |
 | --- | --- | --- |
 | L1 Cache | R0 - R15 | 16 x 32bit |
-| NEON寄存器 | Q0 - Q15 或 D0 - D21 | 16 x 128bit 或 32 x 64bit |
+| NEON寄存器 | Q0 - Q15 或 D0 - D31 | 16 x 128bit 或 32 x 64bit |
 | VFP寄存器（浮点运算）| S0 - S15 | 16 x 32bit |
 
 表中NEON寄存器是NEON函数调用的主要寄存器。ARMv7有16个128bit寄存器，每个128bit寄存器可拆分成2 x 64bit使用。
@@ -198,6 +198,12 @@ inline void do_plain_neon_mul_ten_with_arr(const int8_t *tensor, const int8_t *a
 
 以上代码完成了对读内存的优化，消耗时间为 0.154 ms。   
 这个耗时比单纯的压缩对每行矩阵运算读操作的耗时还要短，是因为在计算前对读内存的指针距离进行了优化，这个原理可以从文章开头对CPU-cache的介绍中了解到。    
+
+// TODO 关于运算pipeline的优化 (未填完的坑)
+// 1. 乘法存在延迟，几个周期
+// 2. 访存存在延迟，可以提前加载，2次load，4次浮点乘法操作
+// 3. 访存范围小于cache，将加速。NEON寄存器与L1 L2直连
+// 4. 使用汇编代码测试加速极限
 
 ## 总结
 
