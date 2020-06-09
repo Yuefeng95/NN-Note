@@ -4,6 +4,8 @@ NEON是用来实现ARM芯片上计算加速的一套系统。以下介绍NEON的
 
 > 喜欢啃英文手册的同学可以直接跳转 [NEON在线手册](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0002a/ch01s03s02.html) 
 
+（文中提及的都是armv8 32位指令）
+
 ## 什么是SIMD
 
 NEON是一种加速技术的实现，而这个技术就是SIMD。
@@ -35,8 +37,6 @@ SIMD的寄存器内的并行优于现代编程语言多线程并行操作的原�
 > 喜欢啃英文博客的同学可直接跳转 [How L1 and L2 CPU Caches Work, and Why They’re an Essential Part of Modern Chips](https://www.extremetech.com/extreme/188776-how-l1-and-l2-cpu-caches-work-and-why-theyre-an-essential-part-of-modern-chips)
 
 CPU读取L1缓存时，就像人们挑选自己的扑克牌，必须每个牌都看一遍才能正确拾取。
-
->> // TODO 没填完的坑
 
 ## NEON的硬件基础
 
@@ -199,13 +199,17 @@ inline void do_plain_neon_mul_ten_with_arr(const int8_t *tensor, const int8_t *a
 以上代码完成了对读内存的优化，消耗时间为 0.154 ms。   
 这个耗时比单纯的压缩对每行矩阵运算读操作的耗时还要短，是因为在计算前对读内存的指针距离进行了优化，这个原理可以从文章开头对CPU-cache的介绍中了解到。    
 
-// TODO 关于运算pipeline的优化 (未填完的坑)
-// 1. 乘法存在延迟，几个周期
-// 2. 访存存在延迟，可以提前加载，2次load，4次浮点乘法操作
-// 3. 访存范围小于cache，将加速。NEON寄存器与L1 L2直连
-// 4. 使用汇编代码测试加速极限
 
 ## 总结
 
 以上是对NEON优化的介绍。通过合理的并行运算＋内存优化，可将ARM上的运算耗时大大压缩。    
 > 完整的 [测试代码](https://github.com/Yuefeng95/nn-test)
+
+> TODO 关于运算pipeline的优化 (未填完的坑)
+> 1. 乘法存在延迟，几个周期
+> 2. 访存存在延迟，可以提前加载，2次load，4次浮点乘法操作
+> 3. 访存范围小于cache，将加速。NEON寄存器与L1 L2直连
+> 4. 预加载指令
+> 5. 使用汇编代码测试加速极限
+> 6. 使用汇编代码进一步优化速度
+> [内联汇编的使用](./ASM.md)
